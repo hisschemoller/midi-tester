@@ -1,0 +1,16 @@
+{
+  "name": "midi-tester",
+  "version": "0.0.1",
+  "main": "server.js",
+  "repository": "https://gitlab.com/hisschemoller/video-edit-3d.git",
+  "author": "Wouter Hisschemöller <wouter.hisschemoller@gmail.com>",
+  "description": "MIDI Tester",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {}
+}
