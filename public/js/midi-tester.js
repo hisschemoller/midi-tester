@@ -47,6 +47,8 @@ function setupControls() {
   const controlsEl = document.getElementById('controls');
   controlsEl.appendChild(createNoteButton(1, 60, 100));
   controlsEl.appendChild(createNoteButton(1, 61, 100));
+  controlsEl.appendChild(createCCSlider(1, 17, 100));
+  controlsEl.appendChild(createCCSlider(1, 18));
 }
 
 /**
@@ -57,16 +59,44 @@ function setupControls() {
  * @returns {Object} Button element.
  */
 function createNoteButton(channel, pitch, velocity) {
+  let isOn = false;
   const btnEl = document.createElement('button');
   btnEl.setAttribute('type', 'button');
   btnEl.textContent = `Note ch${channel} p${pitch} v${velocity}`;
   btnEl.addEventListener('mousedown', () => {
-    outputPort.playNote(pitch, channel, { velocity, rawVelocity: true });
+    if (!isOn) {
+      outputPort.playNote(pitch, channel, { velocity, rawVelocity: true });
+      isOn = true;
+    }
   });
   const stopNote = () => {
-    outputPort.stopNote(pitch, channel, { velocity: 0 });
+    if (isOn) {
+      isOn = false;
+      outputPort.stopNote(pitch, channel, { velocity: 0 });
+    }
   };
   btnEl.addEventListener('mouseup', stopNote);
   btnEl.addEventListener('mouseout', stopNote);
   return btnEl;
+}
+
+function createCCSlider(channel, controller, value = 0) {
+  const spanEl = document.createElement('span');
+  spanEl.textContent = `CControl ch${channel} ctr${controller}`;
+  const onChange = e => {
+    outputPort.sendControlChange(controller, e.target.value, channel);
+  };
+  const rangeEl = document.createElement('input');
+  rangeEl.setAttribute('type', 'range');
+  rangeEl.setAttribute('min', '0');
+  rangeEl.setAttribute('max', '127');
+  rangeEl.setAttribute('step', '1');
+  rangeEl.setAttribute('value', value);
+  rangeEl.addEventListener('input', onChange);
+	rangeEl.addEventListener('change', onChange);
+  const labelEl = document.createElement('label');
+  labelEl.classList.add('range')
+  labelEl.appendChild(spanEl);
+  labelEl.appendChild(rangeEl);
+  return labelEl;
 }

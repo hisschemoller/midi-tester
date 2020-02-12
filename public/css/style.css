@@ -36,6 +36,17 @@ time, mark, audio, video {
 	margin: 4px 0;
 }
 #controls button {
+	display: block;
 	margin: 4px 12px;
 	padding: 4px 12px;
+	width: 150px;
+}
+#controls .range {
+	display: flex;
+	flex-direction: column;
+	margin: 4px 12px;
+	width: 150px;
+}
+#controls .range  {
+	
 }
